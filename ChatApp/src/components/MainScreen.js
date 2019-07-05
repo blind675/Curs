@@ -59,14 +59,14 @@ class MainScreen extends Component {
                             marginHorizontal: 16,
                             borderWidth: 1,
                         }}
-                        source={{uri: `https://api.adorable.io/avatars/80/${this.props.user.userName }`}}
+                        source={{uri: `https://api.adorable.io/avatars/80/${this.props.user.userEmail }`}}
                     />
                     <Text
                         style={{
                             marginVertical: 8,
                             fontSize: 20,
                             color: '#0F0F0F'
-                        }}> {this.props.user.userName} </Text>
+                        }}> {this.props.user.userEmail} </Text>
                 </View>
                 <FlatList
                     style={{

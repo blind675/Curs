@@ -13,7 +13,7 @@ class ChatScreen extends Component {
                 message: 'Pimul mesaj de test, Lorem ipsul, lorem ipsum, text cat mai lung',
                 author: {
                     id: 12,
-                    userName: 'Bob',
+                    userEmail: 'Bob',
                     userAvatar: 'https://api.adorable.io/avatars/30/Bob'
                 }
             },
@@ -22,7 +22,7 @@ class ChatScreen extends Component {
                 message: 'Mesaj nr.2, scurt',
                 author: {
                     id: 2,
-                    userName: 'Gaby',
+                    userEmail: 'Gaby',
                     userAvatar: 'https://api.adorable.io/avatars/30/Gaby'
                 }
             }],
@@ -69,7 +69,7 @@ class ChatScreen extends Component {
                                 <Text style={{
                                     fontSize: 14,
                                     margin: 4
-                                }} > {item.author.userName} </Text>
+                                }} > {item.author.userEmail} </Text>
                             </View>
                             <Text style={{ 
                                 marginTop: 4,
@@ -99,7 +99,7 @@ class ChatScreen extends Component {
                         }}
                         editable={true}
                         maxLength={40}
-                        placeholder={'Adauga un canal'}
+                        placeholder={'Mesajul tau'}
                     // onChangeText={(text) => this.setState({ newChannelName: text })}
                     // value={this.state.newChannelName}
                     />

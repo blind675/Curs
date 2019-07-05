@@ -10,16 +10,16 @@ class LoginScreen extends Component {
         super(props)
         this.state = {
             userAvatar: 'https://api.adorable.io/avatars/180',
-            userName: null,
+            userEmail: null,
             userPassword: null,
         }
     }
 
     pressOnLoginButton() {
-        if(this.state.userName !== null && this.state.userPassword !== null) {
+        if(this.state.userEmail !== null && this.state.userPassword !== null) {
             const userObject = {
-                userAvatar: `https://api.adorable.io/avatars/180/${this.state.userName}`,
-                userName: this.state.userName,
+                userAvatar: `https://api.adorable.io/avatars/180/${this.state.userEmail}`,
+                userEmail: this.state.userEmail,
                 userPassword: this.state.userPassword,
             }
             this.props.userLogin(userObject)
@@ -56,12 +56,12 @@ class LoginScreen extends Component {
                     editable={true}
                     autoCorrect={false}
                     maxLength={40}
-                    placeholder={'User Name'}
+                    placeholder={'User Email'}
                     onChangeText={(text)=> this.setState({
                         userAvatar: `https://api.adorable.io/avatars/180/${text}`,
                         userName: text
                     })}
-                    value={this.state.userName}
+                    value={this.state.userEmail}
                 />
                 <TextInput
                     style={styles.textInputStyle}
