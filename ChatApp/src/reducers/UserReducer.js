@@ -9,7 +9,7 @@ export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case USER_CREATE_LOGIN_SUCCESS:
             return {
-                userName: action.payload.userName,
+                userEmail: action.payload.userEmail,
             };
         case USER_CREATE_LOGIN_FAIL:
             return null;

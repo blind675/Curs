@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, TextInput, Image } from 'react-native';
 import { connect } from 'react-redux';
+import firebase from 'firebase';
 
 import * as actions from '../actions';
 import { Button } from './common/Button';
@@ -16,18 +17,37 @@ class LoginScreen extends Component {
     }
 
     pressOnLoginButton() {
-        if(this.state.userEmail !== null && this.state.userPassword !== null) {
+
+        if (this.state.userEmail !== null && this.state.userPassword !== null) {
             const userObject = {
                 userAvatar: `https://api.adorable.io/avatars/180/${this.state.userEmail}`,
                 userEmail: this.state.userEmail,
                 userPassword: this.state.userPassword,
             }
-            this.props.userLogin(userObject)
+
+            firebase.auth().signInWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
+                .then((existingUser) => {
+                    const profileUid = existingUser.user.uid;
+                    console.log('- Auth user found with ID: ', profileUid);
+                    this.props.getProfile(profileUid);
+                })
+                .catch((error) => {
+                    console.log('- Login error: ', error);
+                    firebase.auth().createUserWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
+                        .then((newUser) => {
+                            const newProfileUid = newUser.user.uid;
+                            console.log('- Creating auth user found with ID: ', newProfileUid);
+                            this.props.createProfile(newProfileUid, this.state.userEmail);
+                        })
+                        .catch((createError) => {
+                            console.log('error:', createError);
+                        });
+                });
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.user) {
+        if (nextProps.user) {
             this.props.navigation.navigate('Main');
         }
     }
@@ -49,7 +69,7 @@ class LoginScreen extends Component {
                         borderWidth: 1,
                         marginBottom: 16
                     }}
-                    source={{uri: this.state.userAvatar}}
+                    source={{ uri: this.state.userAvatar }}
                 />
                 <TextInput
                     style={styles.textInputStyle}
@@ -57,9 +77,9 @@ class LoginScreen extends Component {
                     autoCorrect={false}
                     maxLength={40}
                     placeholder={'User Email'}
-                    onChangeText={(text)=> this.setState({
+                    onChangeText={(text) => this.setState({
                         userAvatar: `https://api.adorable.io/avatars/180/${text}`,
-                        userName: text
+                        userEmail: text
                     })}
                     value={this.state.userEmail}
                 />
@@ -70,7 +90,7 @@ class LoginScreen extends Component {
                     maxLength={40}
                     placeholder={'Password'}
                     secureTextEntry={true}
-                    onChangeText={(text)=> this.setState({userPassword: text})}
+                    onChangeText={(text) => this.setState({ userPassword: text })}
                     value={this.state.userPassword}
                 />
                 <Button
