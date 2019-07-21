@@ -3,6 +3,7 @@ import { createSwitchNavigator, createAppContainer, createStackNavigator } from 
 import LoginScreen from './components/LoginScreen';
 import MainScreen from './components/MainScreen';
 import ChatScreen from './components/ChatScreen';
+import LoadingScreen from './components/LoadingScreen';
 
 const StackNavigator = createStackNavigator({
     ChannelPage: MainScreen,
@@ -10,6 +11,7 @@ const StackNavigator = createStackNavigator({
 });
 
 const SwitchNavigator = createSwitchNavigator({
+    Loading: LoadingScreen,
     Login: LoginScreen,
     Main:  StackNavigator,
 });

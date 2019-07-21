@@ -9,6 +9,7 @@ import {
 export const createProfile = (profileId, email) => {
     return (dispatch) => {
 
+        
         console.log('got here: ', profileId, email)
         firebase.database().ref(`/profiles/${profileId}`).set(
             {

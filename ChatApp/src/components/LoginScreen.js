@@ -17,7 +17,6 @@ class LoginScreen extends Component {
     }
 
     pressOnLoginButton() {
-
         if (this.state.userEmail !== null && this.state.userPassword !== null) {
             const userObject = {
                 userAvatar: `https://api.adorable.io/avatars/180/${this.state.userEmail}`,
@@ -29,15 +28,24 @@ class LoginScreen extends Component {
                 .then((existingUser) => {
                     const profileUid = existingUser.user.uid;
                     console.log('- Auth user found with ID: ', profileUid);
+                    // TODO: save userId and email to user defaults
+
                     this.props.getProfile(profileUid);
                 })
                 .catch((error) => {
                     console.log('- Login error: ', error);
                     firebase.auth().createUserWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
                         .then((newUser) => {
+                            // TODO: save userId and email to user defaults
+                            // make a method for this
+
+                            console.log(' Current user: ', firebase.auth().currentUser);
+
                             const newProfileUid = newUser.user.uid;
                             console.log('- Creating auth user found with ID: ', newProfileUid);
                             this.props.createProfile(newProfileUid, this.state.userEmail);
+
+
                         })
                         .catch((createError) => {
                             console.log('error:', createError);
