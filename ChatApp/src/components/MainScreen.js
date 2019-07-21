@@ -3,34 +3,23 @@ import { View, Image, Text, TextInput, TouchableOpacity, FlatList, KeyboardAvoid
 import { connect } from 'react-redux';
 
 import { Button } from './common/Button';
+import * as actions from '../actions';
 
 class MainScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             newChannelName: '',
-            channelsList: [{
-                id: 0,
-                name: '#random',
-            },
-            {
-                id: 1,
-                name: '#general',
-            }]
         }
     }
 
     addButtonPressed() {
         Keyboard.dismiss()
 
-        const newChannel = {
-            id: this.state.channelsList.length,
-            name: `#${this.state.newChannelName}`
-        }
+        this.props.addChannel(this.state.newChannelName);
 
         this.setState(
             {
-                channelsList: [...this.state.channelsList, newChannel],
                 newChannelName: ''
             }
         );
@@ -59,21 +48,21 @@ class MainScreen extends Component {
                             marginHorizontal: 16,
                             borderWidth: 1,
                         }}
-                        source={{uri: `https://api.adorable.io/avatars/80/${this.props.user.userEmail }`}}
+                        source={{uri: `https://api.adorable.io/avatars/80/${this.props.user.email }`}}
                     />
                     <Text
                         style={{
                             marginVertical: 8,
                             fontSize: 20,
                             color: '#0F0F0F'
-                        }}> {this.props.user.userEmail} </Text>
+                        }}> {this.props.user.email} </Text>
                 </View>
                 <FlatList
                     style={{
                         flex: 1,
                     }}
-                    data={this.state.channelsList}
-                    keyExtractor={(item) => `${item.id}`}
+                    data={this.props.channels}
+                    keyExtractor={(item) => `${item.uid}`}
                     renderItem={({ item }) =>
                         < TouchableOpacity
                             style={{
@@ -85,10 +74,13 @@ class MainScreen extends Component {
                                 borderBottomWidth: 1
                             }}
                             onPress={() => {
-                                this.props.navigation.navigate('ChatPage');
+                                this.props.navigation.navigate('ChatPage', {
+                                    channel:item,
+                                    header:`#${item.name}`
+                                });
                             }}
                         >
-                            <Text style={{ fontSize: 16 }}> {item.name}</Text>
+                            <Text style={{ fontSize: 16 }}> #{item.name}</Text>
                         </TouchableOpacity>
                     }
                 />
@@ -129,8 +121,9 @@ class MainScreen extends Component {
 
 const mapStateToProps = state => {
     return {
+        channels: state.channels,
         user: state.user
     };
 };
 
-export default connect(mapStateToProps, null)(MainScreen);
+export default connect(mapStateToProps, actions)(MainScreen);

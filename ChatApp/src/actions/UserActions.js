@@ -1,23 +1,20 @@
-import firebase from 'firebase';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
-    USER_CREATE_LOGIN_SUCCESS,
-    USER_CREATE_LOGIN_FAIL
+    USER_CREATE_GET_SUCCESS,
+    USER_CREATE_GET_FAIL
 } from "./types";
 
-
-export const createProfile = (profileId, email) => {
+export const saveUser = (profileId, email) => {
     return (dispatch) => {
 
-        
-        console.log('got here: ', profileId, email)
-        firebase.database().ref(`/profiles/${profileId}`).set(
-            {
-                uid: profileId,
-                email,
-            }).then(() => {
+        AsyncStorage.setItem('@user_storage_Key', JSON.stringify({
+            email,
+            uid: profileId
+        }))
+            .then(() => {
                 dispatch({
-                    type: USER_CREATE_LOGIN_SUCCESS,
+                    type: USER_CREATE_GET_SUCCESS,
                     payload: {
                         email,
                         uid: profileId
@@ -25,26 +22,33 @@ export const createProfile = (profileId, email) => {
                 });
             })
             .catch((error) => {
-                console.log('error:', error);
-                dispatch({ type: USER_CREATE_LOGIN_FAIL });
+                dispatch({
+                    type: USER_CREATE_GET_FAIL,
+                });
             });
     }
 };
 
-export const getProfile = (profileUid) => {
+export const getUser = () => {
     return (dispatch) => {
-        firebase.database().ref(`/profiles/${profileUid}`)
-            .once('value', (snapshot) => {
-                const profile = { ...snapshot.val(), uid: profileUid };
-                if (profile) {
-                    // save profile local
-                    // saveProfile(profile);
-                    console.log('profile: ', profile);
+        AsyncStorage.getItem('@user_storage_Key')
+            .then((user) => {
+                if (user !== null) {
+                    var userObject = JSON.parse(user);
                     dispatch({
-                        payload: profile,
-                        type: USER_CREATE_LOGIN_SUCCESS
+                        type: USER_CREATE_GET_SUCCESS,
+                        payload: userObject
+                    });
+                } else {
+                    dispatch({
+                        type: USER_CREATE_GET_FAIL,
                     });
                 }
+            })
+            .catch((error) => {
+                dispatch({
+                    type: USER_CREATE_GET_FAIL,
+                });
             });
     }
 };

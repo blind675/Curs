@@ -1,22 +1,24 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import firebase from 'firebase';
 
 import * as actions from '../actions';
 
 class LoadingScreen extends Component {
     componentDidMount() {
-        // TODO: read user from user defaults
-        // if any get channels 
-        // if none go to login
-        this.props.navigation.navigate('Login');
-        
+        this.props.getUser();
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.channels) {
             this.props.navigation.navigate('Main');
+        } else if (nextProps.user) {
+            // we have a user
+            if (nextProps.user.email) {
+                this.props.getChannels();
+            } else {
+                this.props.navigation.navigate('Login');
+            }
         }
     }
 
@@ -34,7 +36,8 @@ class LoadingScreen extends Component {
 
 const mapStateToProps = state => {
     return {
-        channels: state.channels
+        channels: state.channels,
+        user: state.user
     };
 };
 

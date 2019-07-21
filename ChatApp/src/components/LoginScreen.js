@@ -13,6 +13,7 @@ class LoginScreen extends Component {
             userAvatar: 'https://api.adorable.io/avatars/180',
             userEmail: null,
             userPassword: null,
+            loading: false
         }
     }
 
@@ -24,40 +25,55 @@ class LoginScreen extends Component {
                 userPassword: this.state.userPassword,
             }
 
-            firebase.auth().signInWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
-                .then((existingUser) => {
-                    const profileUid = existingUser.user.uid;
-                    console.log('- Auth user found with ID: ', profileUid);
-                    // TODO: save userId and email to user defaults
+            this.setState({
+                loading: true
+            })
 
-                    this.props.getProfile(profileUid);
+            firebase.auth().createUserWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
+                .then((newUser) => {
+                    const newProfileUid = newUser.user.uid;
+                    console.log('- Creating auth user found with ID: ', newProfileUid);
+
+                    this.props.saveUser(newProfileUid, this.state.userEmail);
+                    
+                    this.setState({
+                        loading: false
+                    })
                 })
-                .catch((error) => {
-                    console.log('- Login error: ', error);
-                    firebase.auth().createUserWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
-                        .then((newUser) => {
-                            // TODO: save userId and email to user defaults
-                            // make a method for this
+                .catch((createError) => {
+                    console.log('error:', createError);
 
-                            console.log(' Current user: ', firebase.auth().currentUser);
-
-                            const newProfileUid = newUser.user.uid;
-                            console.log('- Creating auth user found with ID: ', newProfileUid);
-                            this.props.createProfile(newProfileUid, this.state.userEmail);
-
-
-                        })
-                        .catch((createError) => {
-                            console.log('error:', createError);
-                        });
+                    this.setState({
+                        loading: false
+                    })
                 });
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.user) {
+        if (nextProps.channels) {
             this.props.navigation.navigate('Main');
+        } else if (nextProps.user) {
+            // we have a user
+            if (nextProps.user.email) {
+                this.props.getChannels();
+            } else {
+                this.props.navigation.navigate('Login');
+            }
         }
+    }
+
+    renderButton() {
+        if (this.state.loading === false) {
+            return (
+                <Button
+                    style={{ marginTop: 32 }}
+                    title={'Login'}
+                    onPress={this.pressOnLoginButton.bind(this)} />
+            );
+        }
+
+        return (<View style={{ marginTop: 32 }} />);
     }
 
     render() {
@@ -101,10 +117,8 @@ class LoginScreen extends Component {
                     onChangeText={(text) => this.setState({ userPassword: text })}
                     value={this.state.userPassword}
                 />
-                <Button
-                    style={{ marginTop: 32 }}
-                    title={'Login'}
-                    onPress={this.pressOnLoginButton.bind(this)} />
+                {/* render button only if this.state.loading === false */}
+                {this.renderButton()}
             </View>
         );
     }
@@ -122,7 +136,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        user: state.user
+        user: state.user,
+        channels: state.channels,
     };
 };
 
