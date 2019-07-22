@@ -51,16 +51,9 @@ class LoginScreen extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.channels) {
+        if (nextProps.user && nextProps.user.email) {
             this.props.navigation.navigate('Main');
-        } else if (nextProps.user) {
-            // we have a user
-            if (nextProps.user.email) {
-                this.props.getChannels();
-            } else {
-                this.props.navigation.navigate('Login');
-            }
-        }
+        } 
     }
 
     renderButton() {

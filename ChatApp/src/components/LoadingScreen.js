@@ -10,15 +10,10 @@ class LoadingScreen extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.channels) {
+        if (nextProps.user && nextProps.user.email) {
             this.props.navigation.navigate('Main');
-        } else if (nextProps.user) {
-            // we have a user
-            if (nextProps.user.email) {
-                this.props.getChannels();
-            } else {
-                this.props.navigation.navigate('Login');
-            }
+        } else {
+            this.props.navigation.navigate('Login');
         }
     }
 
@@ -36,7 +31,6 @@ class LoadingScreen extends Component {
 
 const mapStateToProps = state => {
     return {
-        channels: state.channels,
         user: state.user
     };
 };

@@ -13,6 +13,10 @@ class MainScreen extends Component {
         }
     }
 
+    componentWillMount() {
+        this.props.getChannels();
+    }
+
     addButtonPressed() {
         Keyboard.dismiss()
 
