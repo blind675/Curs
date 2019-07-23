@@ -29,6 +29,7 @@ class LoginScreen extends Component {
                 loading: true
             })
 
+            // TODO: refactor this to support the login - create logic
             firebase.auth().createUserWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
                 .then((newUser) => {
                     const newProfileUid = newUser.user.uid;
