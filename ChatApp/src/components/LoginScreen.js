@@ -8,12 +8,18 @@ import { Button } from './common/Button';
 
 class LoginScreen extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             userAvatar: 'https://api.adorable.io/avatars/180',
             userEmail: null,
             userPassword: null,
             loading: false
+        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user && nextProps.user.email) {
+            this.props.navigation.navigate('Main');
         }
     }
 
@@ -23,38 +29,48 @@ class LoginScreen extends Component {
                 userAvatar: `https://api.adorable.io/avatars/180/${this.state.userEmail}`,
                 userEmail: this.state.userEmail,
                 userPassword: this.state.userPassword,
-            }
+            };
 
             this.setState({
                 loading: true
-            })
+            });
 
-            // TODO: refactor this to support the login - create logic
-            firebase.auth().createUserWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
-                .then((newUser) => {
-                    const newProfileUid = newUser.user.uid;
-                    console.log('- Creating auth user found with ID: ', newProfileUid);
+            firebase.auth()
+                .signInWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
+                .then((user) => {
+                    const newProfileUid = user.user.uid;
+                    console.log('- Found user With ID: ', newProfileUid);
 
                     this.props.saveUser(newProfileUid, this.state.userEmail);
-                    
-                    this.setState({
-                        loading: false
-                    })
-                })
-                .catch((createError) => {
-                    console.log('error:', createError);
 
                     this.setState({
                         loading: false
-                    })
+                    });
+                })
+                .catch((loginError) => {
+                    console.log('error:', loginError);
+
+                    firebase.auth()
+                        .createUserWithEmailAndPassword(userObject.userEmail, userObject.userPassword)
+                        .then((newUser) => {
+                            const newProfileUid = newUser.user.uid;
+                            console.log('- Creating auth user found with ID: ', newProfileUid);
+
+                            this.props.saveUser(newProfileUid, this.state.userEmail);
+
+                            this.setState({
+                                loading: false
+                            });
+                        })
+                        .catch((createError) => {
+                            console.log('error:', createError);
+
+                            this.setState({
+                                loading: false
+                            });
+                        });
                 });
         }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.user && nextProps.user.email) {
-            this.props.navigation.navigate('Main');
-        } 
     }
 
     renderButton() {
@@ -63,7 +79,8 @@ class LoginScreen extends Component {
                 <Button
                     style={{ marginTop: 32 }}
                     title={'Login'}
-                    onPress={this.pressOnLoginButton.bind(this)} />
+                    onPress={this.pressOnLoginButton.bind(this)}
+                />
             );
         }
 
@@ -91,7 +108,7 @@ class LoginScreen extends Component {
                 />
                 <TextInput
                     style={styles.textInputStyle}
-                    editable={true}
+                    editable
                     autoCorrect={false}
                     maxLength={40}
                     placeholder={'User Email'}
@@ -103,11 +120,11 @@ class LoginScreen extends Component {
                 />
                 <TextInput
                     style={styles.textInputStyle}
-                    editable={true}
+                    editable
                     autoCorrect={false}
                     maxLength={40}
                     placeholder={'Password'}
-                    secureTextEntry={true}
+                    secureTextEntry
                     onChangeText={(text) => this.setState({ userPassword: text })}
                     value={this.state.userPassword}
                 />
@@ -128,11 +145,9 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapStateToProps = state => {
-    return {
-        user: state.user,
-        channels: state.channels,
-    };
-};
+const mapStateToProps = state => ({
+    user: state.user,
+    channels: state.channels,
+});
 
 export default connect(mapStateToProps, actions)(LoginScreen);
