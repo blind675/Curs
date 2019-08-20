@@ -1,0 +1,38 @@
+.center {
+    margin: auto;
+    height: 300px;
+    width: 300px;
+    background-color: aqua;
+    display: flex;
+    flex-direction: row;
+}
+#rand {
+    flex-direction: column;
+    flex: 1;
+    background-color: blueviolet;
+}
+#rand2 {
+    flex-direction: column;
+    flex: 1;
+    background-color:mediumvioletred;
+}
+#patratUnu {
+    background-color: red;
+    width: 100%;
+    height: 50%;
+}
+#patratDoi {
+    background-color: blue;
+    width: 100%;
+    height: 50%;
+}
+#patratTrei {
+    background-color: green;
+    width: 100%;
+    height: 50%;
+}
+#patratPatru {
+    background-color: yellow;
+    width: 100%;
+    height: 50%;
+}
