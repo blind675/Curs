@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Calculator </title>
+    <style>
+        html {
+            font-family: "Courier New" !important;
+        }
+
+        button:hover {
+            background-color: #eaeaea;
+        }
+
+        #calculator {
+            display: flex;
+            height: 700px;
+            width: 400px;
+            background-color: gray;
+            margin: auto;
+            flex-direction: column;
+        }
+
+        #zonaRezultat {
+            height: 200px;
+            width: 400px;
+            background-color: #393855;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #rezultat {
+            margin: 12px;
+            text-align: right;
+            line-height: 160px;
+            color: aliceblue;
+            font-size: 62px;
+        }
+
+        .randTaste {
+            height: 100px;
+            width: 400px;
+            background-color: red;
+            padding: 0px;
+            margin: 0px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .butonAlbastru {
+            border: 1px solid #D3D3D3;
+            background-color: #6D83EC;
+            height: 100px;
+            width: 100px;
+            margin: 0px;
+            color: aliceblue;
+            font-size: 30px;
+        }
+
+        .butonMov {
+            background-color: #574F97;
+        }
+
+        .butonMare {
+            width: 200px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        var rezultatAfisat = '0';
+
+        var termenul1 = 0;
+        var termenul2 = 0;
+
+        var adunare = false;
+        var scadere = false;
+        //... inmultire , impartire
+
+        function adaugaCaracter(caracter) {
+
+            if (rezultatAfisat.length < 10) {
+
+                if (caracter === '.' && rezultatAfisat.includes('.')) {
+                    return;
+                }
+
+                rezultatAfisat = (rezultatAfisat === "0") ? ('' + caracter) : (rezultatAfisat + caracter);
+
+                if (adunare === true || scadere === true) { //... inmultire si impartire
+                    termenul2 = parseFloat(rezultatAfisat);
+                } else {
+                    termenul1 = parseFloat(rezultatAfisat);
+                }
+
+                afisazaRezultat(rezultatAfisat);
+            }
+        }
+
+        function curataOperatiile() {
+            adunare = false;
+            scadere = false;
+            //... inmultire , impartire
+        }
+
+        function curata() {
+            termenul1 = 0;
+            termenul2 = 0;
+
+            curataOperatiile();
+            afisazaRezultat('0');
+        }
+
+        function selecteazaAdunare() {
+            curataOperatiile();
+            adunare = true;
+
+            afisazaRezultat('0');
+        }
+
+        function selecteazaScadere() {
+            curataOperatiile();
+            scadere = true;
+
+            afisazaRezultat('0');
+        }
+
+        //... inmultire , impartire
+        function egal() {
+            var rezultat = 0;
+
+            if (adunare) {
+                rezultat = termenul1 + termenul2;
+            } else if (scadere) {
+                rezultat = termenul1 - termenul2;
+
+            }
+            termenul1 = rezultat;
+
+            afisazaRezultat(rezultat);
+        }
+
+        function afisazaRezultat(rezultat) {
+            console.log("termenul1: ", termenul1);
+            console.log("termenul2: ", termenul2);
+
+            rezultatAfisat = rezultat;
+            document.getElementById("rezultat").innerHTML = rezultatAfisat;
+        }
+
+    </script>
+</head>
+
+<body>
+    <div id="calculator">
+        <div id="zonaRezultat">
+            <p id="rezultat">0</p>
+        </div>
+
+        <div class="randTaste">
+            <button type="button" class="butonAlbastru" onclick="curata()">AC</button>
+            <button type="button" class="butonAlbastru">+/-</button>
+            <button type="button" class="butonAlbastru">%</button>
+            <button type="button" class="butonAlbastru">/</button>
+        </div>
+
+        <div class="randTaste">
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(7)">7</button>
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(8)">8</button>
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(9)">9</button>
+            <button type="button" class="butonAlbastru">x</button>
+        </div>
+
+        <div class="randTaste">
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(4)">4</button>
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(5)">5</button>
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(6)">6</button>
+            <button type="button" class="butonAlbastru" onclick="selecteazaScadere()">-</button>
+        </div>
+
+        <div class="randTaste">
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(1)">1</button>
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(2)">2</button>
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter(3)">3</button>
+            <button type="button" class="butonAlbastru" onclick="selecteazaAdunare()">+</button>
+        </div>
+
+        <div class="randTaste">
+            <button type="button" class="butonAlbastru butonMov butonMare" onclick="adaugaCaracter(0)">0</button>
+            <button type="button" class="butonAlbastru butonMov" onclick="adaugaCaracter('.')">.</button>
+            <button type="button" class="butonAlbastru" onclick="egal()">=</button>
+        </div>
+    </div>
+</body>
+
+</html>
