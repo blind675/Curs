@@ -31,9 +31,9 @@
         {
           "id": 4,
           "type": "ps",
-          "smURL": "small",
-          "mdURL": "medium",
-          "URL": "poza 360",
+          "smURL": "https://picsum.photos/id/867/240/160",
+          "mdURL": "https://picsum.photos/id/867/540/360",
+          "URL": "https://picsum.photos/id/867/1080/720",
           "infoSpots": [
             {
               "pitch": 30,
