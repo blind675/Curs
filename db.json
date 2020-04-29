@@ -10,23 +10,23 @@
         {
           "id": 1,
           "type": "pi",
-          "smURL": "small",
-          "mdURL": "medium",
-          "URL": "poza 1"
+          "smURL": "https://picsum.photos/id/237/240/160",
+          "mdURL": "https://picsum.photos/id/237/540/360",
+          "URL": "https://picsum.photos/id/237/1080/720",
         },
         {
           "id": 2,
           "type": "pi",
-          "smURL": "small",
-          "mdURL": "medium",
-          "URL": "poza 2"
+          "smURL": "https://picsum.photos/id/1037/240/160",
+          "mdURL": "https://picsum.photos/id/1037/540/360",
+          "URL": "https://picsum.photos/id/1037/1080/720",
         },
         {
           "id": 3,
           "type": "pi",
-          "smURL": "small",
-          "mdURL": "medium",
-          "URL": "poza 3"
+          "smURL": "https://picsum.photos/id/866/240/160",
+          "mdURL": "https://picsum.photos/id/866/540/360",
+          "URL": "https://picsum.photos/id/866/1080/720",
         },
         {
           "id": 4,
@@ -34,6 +34,13 @@
           "smURL": "small",
           "mdURL": "medium",
           "URL": "poza 360"
+          "infoSpots": [
+            {
+              "pitch":,
+              "yaw":,
+              "text":
+            }
+          ]
         }
       ]
     }
