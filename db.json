@@ -1,0 +1,41 @@
+{
+  "tour_stops": [
+    {
+      "id": 1232,
+      "siteId": 4435,
+      "name": "Cafeteria",
+      "geoLat": 45.545445,
+      "geoLng": 24.2443,
+      "images": [
+        {
+          "id": 1,
+          "type": "pi",
+          "smURL": "small",
+          "mdURL": "medium",
+          "URL": "poza 1"
+        },
+        {
+          "id": 2,
+          "type": "pi",
+          "smURL": "small",
+          "mdURL": "medium",
+          "URL": "poza 2"
+        },
+        {
+          "id": 3,
+          "type": "pi",
+          "smURL": "small",
+          "mdURL": "medium",
+          "URL": "poza 3"
+        },
+        {
+          "id": 4,
+          "type": "ps",
+          "smURL": "small",
+          "mdURL": "medium",
+          "URL": "poza 360"
+        }
+      ]
+    }
+  ]
+}
